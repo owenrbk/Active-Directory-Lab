@@ -30,4 +30,21 @@ This lab simulates a professional corporate environment by bridging **On-Premise
 ![Domain Name](images/6.png)
 * In the next steps, I leave them as default and I input a Directory Services Restore Mode password, which is something that needs to be saved in case AD is in need of recovery.
 * I leave the rest of the steps as the default and ignore warnings in the Prerequisites Check, as is this a lab environment. Then I click install.
-![Domain Name](images/7.png)
+![Domain Controller Configured](images/7.png)
+* After rebooting the machine, i'm able to log in to the Administrator account in the domain under `LAB\Administrator`
+* In an elevated command prompt, I am able to see the domain's IP address using `nslookup lab.local`
+
+# Creating Organizational Units
+* In the Server Manager, I click "Tools" in the top right corner and click "Active Directory Users and Computers".
+* I right click lab.local, then "New", then "Organizational Unit".
+* I name the OU "_Branches" with an underscore so it appears first in a list, and I make sure "Protect container from accidental delection" is checked.
+* Under _Branches, I create another OU called "Raleigh", and under Raleigh, I create three more called "Users", "Workstations", and "Laptops".
+![Organizational Units](images/8.png)
+
+# Creating Users
+* In Active Directory Users and Computers, I right click the "Users" OU I created in the last step and then New, then Users.
+* I create three users (Jim Valvano, DJ Burns, and James Goodnight). A password is set for each one and I leave "User must change password at next logon" unchecked.
+![Users](images/9.png)
+
+# Creating Security Groups
+* In Active Directory Users and Computers, I right click lab.local, then "New", then "Organizational Unit". This OU is called _Groups
