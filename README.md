@@ -1,4 +1,4 @@
-# ADDS & Entra/Zendesk Lab
+# ADDS & Entra ID Provisioning Lab
 Enterprise Infrastructure Simulation of Windows Server Active Directory Domain Services and Entra ID provisioning for Zendesk, steps with images.
 
 ## Project Overview
