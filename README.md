@@ -51,4 +51,24 @@ This lab simulates a professional corporate environment by bridging **On-Premise
 * When right clicking _Groups, I select **New**, then **Group**.
 * Here I create 3 Groups called Accounting, HR, and IT. The group scope is **Global** and the group type is **Security**
 ![Security Groups](images/10.png)
+* Each user I created is assigned a security group. To do this, I open the group, select the members tab, then add the user.
+
+## Client Computer Domain Configuration
+* Using the CLIENT01 Workstation created in previous steps, we will first log in with a local administrator account.
+* Upon login, we will go to network connections (Windows + R, ncpa.cpl), and change the IPv4 properties of the network adapter so that the preferred DNS server is the domain controller's private IP Address. This ensures that our Active Directory Domain Names can be read by our client computer.
+* Next is to join the domain. We will need to open **Settings**, **System**, **About**, then **Rename this PC (advanced)**.
+* Here we can rename the computer to **client**, and make it a member of **lab.local**. It will prompt to restart the PC.
+![Rename PC](images/11.png)
+* Upon restart, we can log in to the client computer as our domain administrator account. We can see in Active Directory our new client in **lab.local** under the container **Computers**.
+![Client Join](images/12.png)
+
+## Group Policy RDP Access & Domain User Login
+* I am doing this lab with Remote Desktop Protocol into my home server. Ths, I must configure a specific permission to allow a non-administrator to log in via Remote Desktop Protocol.
+* In the Server Manager, I click **Tools** in the top right corner and click **Group Policy Management**.
+* I right click the **Raleigh** group, then **Create a GPO in this domain, and Link it here...**
+* In the image below we see where to locate the Remote Desktop Services permission.
+![GP Management Editor](images/13.png)
+* Here we see 
+* In the client login screen, we select Other User
+
 
