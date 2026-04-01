@@ -2,7 +2,7 @@
 Enterprise Infrastructure Simulation of Windows Server Active Directory Domain Services and Entra ID provisioning for Zendesk, steps with images.
 
 ## Project Overview
-This lab simulates a professional corporate environment by bridging **On-Premises Windows Infrastructure** with **Cloud-based SaaS** tools. I built a private network from scratch, configured core networking services, and integrated a ticketing system to handle real-world Service Desk scenarios.
+This lab simulates a Active Directory environment. I built a private network, configured core networking services, and integrated a ticketing system to handle real-world Service Desk scenarios.
 
 ## Creating the Virtual Machines
 * I created two virtual machines with Microsoft Hyper-V, allocating 4GB of RAM to each and 80GB of virtual disk space. One is the domain controller (DC01) with Windows Server 2022 and the other is a client workstation (CLIENT01) with Windows 10.
@@ -61,14 +61,38 @@ This lab simulates a professional corporate environment by bridging **On-Premise
 ![Rename PC](images/11.png)
 * Upon restart, we can log in to the client computer as our domain administrator account. We can see in Active Directory our new client in **lab.local** under the container **Computers**.
 ![Client Join](images/12.png)
+* We can go back into AD Users and Computers and drag the Client Computer Account into **Workstations** under **_Branches** > **Raleigh**.
 
 ## Group Policy RDP Access & Domain User Login
-* I am doing this lab with Remote Desktop Protocol into my home server. Ths, I must configure a specific permission to allow a non-administrator to log in via Remote Desktop Protocol.
+* I am doing this lab with Remote Desktop Protocol into my home server. Thus, I must configure a specific permission to allow a non-administrator to log in via Remote Desktop Protocol.
 * In the Server Manager, I click **Tools** in the top right corner and click **Group Policy Management**.
 * I right click the **Raleigh** group, then **Create a GPO in this domain, and Link it here...**
 * In the image below we see where to locate the Remote Desktop Services permission.
 ![GP Management Editor](images/13.png)
-* Here we see 
-* In the client login screen, we select Other User
+* Here we see the GPO linked to the Raleigh location. This GPO can now be pushed to clients in command prompt with `gpupdate /force`
+![GPO](images/14.png)
+* In the client computer's login screen, we select Other User, then enter in one of our users username and password. The username must be entered with the `LAB\` domain prefix. We can then identify ourselves in command prompt with `whoami /groups`.
+![whoami](images/15.png)
 
+## Setting a Password Policy
+* It is important to understand common responibilities and nuances of security requirements that organizations use and how Active Directory plays a huge role. Setting a domain-wide password policy shows just this.
+* In the Server Manager, I click **Tools** in the top right corner and click **Group Policy Management**.
+* Under **lab.local**, right click **Default Domain Policy** and click **Edit...**
+* In the drop down menu on the left panel as shown in the image below, we can make our way to Password Policy and set any requirements needed. In this case, I changed the maximum password age to 365 days and the minimum password length to 7 characters. I kept everything else as default.
+![Password Policy](images/16.png)
+
+## Permission Delegation
+* I want to make it so everyone on the IT Team, admin or not, can perform specific permission for their job, such as password resets and forcing a change at next login. To do this, I must go into AD Users and Computers, right click **Users** under **_Branches** > **Raleigh**, and select **Delegate Control**. There I can select tasks to delegate to non-admin IT users like Help Desk.
+![Task Delegation](images/17.png)
+
+## DHCP Configuration
+* When first setting up the Client Computer, I used a static IP address. Outside a lab environment with many workstations, we will need DHCP to assign IP addresses.
+* In the Server Manager, I click **Tools** in the top right corner and click **DHCP**.
+* I select **IPv4** on the left panel, and in the **Actions** screen on the right, I click **New Scope...**
+* In this Wizard, I name the scope **Raleigh-Workstations** and I configure the last octet to use 150-250 as the DHCP range, allowing 101 devices for DHCP. this leaves anything outside that range for static IPs.
+![DHCP Scope](images/18.png)
+* In the next steps, I list my Domain Controller's private IP address as the Default Gateway and the DNS Server. Then I activate the scope now. My Client Computer can now connect with DHCP. I verify in command prompt with `ipconfig /all`, where I see DHCP is enabled.
+![DHCP Enabled](images/19.png)
+
+## DNS 
 
