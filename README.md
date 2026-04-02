@@ -6,7 +6,7 @@ This project involves the end-to-end architecture of a localized Enterprise Infr
 
 ## Creating the Virtual Machines
 * I created two virtual machines with Microsoft Hyper-V, allocating 4GB of RAM and 80GB of virtual disk space to each. One is the domain controller (DC01) with Windows Server 2022 and the other is a client workstation (CLIENT01) with Windows 10.
-![Hyper-V Setup](images/1.png)
+![Hyper-V Setup](images/1.PNG)
 * I created two virtual network interfaces, one called Internal-Lab, which connects the Client to the Domain Controller, and one called Internet-Bridge, which bridges internet connectivity from the Domain Controller to the Client. By configuring this dual-homed setup, I established a secure gateway where the Domain Controller functions as a router, providing the internal lab assets (Client) with WAN access through Network Address Translation (NAT) without exposing them directly to the public internet. We configure this fully when we set up routing (RRAS).
 ![Network Interfaces](images/3.png)
 ![Network Interface Setup, Internal Only and External Virtual Switch](images/4.png)
@@ -25,12 +25,12 @@ This project involves the end-to-end architecture of a localized Enterprise Infr
 
 ## Promoting to Domain Controller
 * Once the features are done installing, I click the yellow flag in the top right corner and click promote to domain controller
-![Promote to DC](images/5.png)
+![Promote to DC](images/5.PNG)
 * In the AD DS Wizard, I click **Add a new forest**. For now, my root domain name is "lab.local"
-![Domain Name](images/6.png)
+![Domain Name](images/6.PNG)
 * In the next steps, I leave them as default and I input a Directory Services Restore Mode password, which is something that needs to be saved in case AD is in need of recovery.
 * I leave the rest of the steps as the default and ignore warnings in the Prerequisites Check, as is this a lab environment. Then I click install.
-![Domain Controller Configured](images/7.png)
+![Domain Controller Configured](images/7.PNG)
 * After rebooting the machine, i'm able to log in to the Administrator account in the domain under **LAB\Administrator**
 * In an elevated command prompt, I am able to see the domain's IP address using `nslookup lab.local`
 
@@ -39,12 +39,12 @@ This project involves the end-to-end architecture of a localized Enterprise Infr
 * I right click lab.local, then **New**, then **Organizational Unit**.
 * I name the OU **_Branches** with an underscore so it appears first in a list, and I make sure **Protect container from accidental delection** is checked.
 * Under _Branches, I create another OU called **Raleigh**, and under Raleigh, I create three more called **Users**, **Workstations**, and **Laptops**.
-![Organizational Units](images/8.png)
+![Organizational Units](images/8.PNG)
 
 ## Creating Users
 * In Active Directory Users and Computers, I right click the **Users** OU I created in the last step and then **New**, then **Users**.
 * I create three users (Jim Valvano, DJ Burns, and James Goodnight). A password is set for each one and I leave **User must change password at next logon** unchecked.
-![Users](images/9.png)
+![Users](images/9.PNG)
 
 ## Creating Security Groups
 * In Active Directory Users and Computers, I right click lab.local, then **New**, then **Organizational** **Unit**. This OU is called **_Groups**.
@@ -58,7 +58,7 @@ This project involves the end-to-end architecture of a localized Enterprise Infr
 * Upon login, we will go to network connections (Windows + R, ncpa.cpl), and change the IPv4 properties of the network adapter so that the preferred DNS server is the domain controller's private IP Address. This ensures that our Active Directory Domain Names can be read by our client computer.
 * Next is to join the domain. We will need to open **Settings**, **System**, **About**, then **Rename this PC (advanced)**.
 * Here we can rename the computer to **client**, and make it a member of **lab.local**. It will prompt to restart the PC.
-![Rename PC](images/11.png)
+![Rename PC](images/11.PNG)
 * Upon restart, we can log in to the client computer as our domain administrator account. We can see in Active Directory our new client in **lab.local** under the container **Computers**.
 ![Client Join](images/12.png)
 * We can go back into AD Users and Computers and drag the Client Computer Account into **Workstations** under **_Branches** > **Raleigh**.
